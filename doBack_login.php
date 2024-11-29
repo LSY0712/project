@@ -11,7 +11,7 @@ if (!isset($_POST["account"])) {
 
 $account = $_POST["account"];
 $password = $_POST["password"];
-$password = ($password);
+$hashedpassword = md5($password);
 
 if (empty($account)) {
     $_SESSION["error"]["message"] = "請輸入帳號";
@@ -24,17 +24,15 @@ if (empty($password)) {
     exit;
 }
 
-$sql = "SELECT * FROM users WHERE account = '$account' AND password = '$password'";
-$result = $conn->query($sql);
-$userCount = $result->num_rows;
+$sql = "SELECT * FROM users WHERE account = '$account' AND password = '$hashedpassword'";
+$result=$conn->query($sql);
+$userCount=$result->num_rows;
 
 if ($userCount == 0) {
     if (!isset($_SESSION["error"]["times"])) {
         $_SESSION["error"]["times"] = 1;
     } else {
-        $error_times = $_SESSION["error"]["times"];
-        $error_times++;
-        $_SESSION["error"]["times"] = $error_times;
+        $_SESSION["error"]["times"]++;
     }
 
     $_SESSION["error"]["message"] = "使用者帳號或密碼錯誤";
@@ -45,14 +43,19 @@ if ($userCount == 0) {
 $user = $result->fetch_assoc();
 $_SESSION["user"] = $user;
 
-// 檢查使用者是否為 manager
-if ($user["manager"] != 1) {
-    $_SESSION["error"]["message"] = "您無權限進入此頁面";
-    header("location: back_login.php");
-    exit;
+// 根據 manager 權限導向不同頁面
+if (isset($user["manager"])) {
+    if ($user["manager"] == 1) {
+        // manager 權限
+        unset($_SESSION["error"]["times"]);
+        $conn->close();
+        header("location: index.php"); // 導向後台管理頁
+        exit;
+    } elseif ($user["manager"] == 0) {
+        // 非 manager 權限
+        unset($_SESSION["error"]["times"]);
+        $conn->close();
+        header("location: 404.html"); // 導向使用者頁面
+        exit;
+    }
 }
-
-unset($_SESSION["error"]["times"]);
-$conn->close();
-
-header("location: index.php");
