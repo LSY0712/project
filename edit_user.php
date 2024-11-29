@@ -4,13 +4,14 @@ require_once("../pj_connect.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
     $level_id = isset($_POST['level_id']) ? intval($_POST['level_id']) : 0;
+    $updated_at = date('Y-m-d H:i:s');
 
     if ($user_id > 0 && $level_id > 0) {
-        $sql = "UPDATE users SET level_id = ? WHERE id = ?";
+        $sql = "UPDATE users SET level_id = ?, updated_at = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
 
         if ($stmt) {
-            $stmt->bind_param("ii", $level_id, $user_id);
+            $stmt->bind_param("ssi", $level_id, $updated_at, $user_id);
             if ($stmt->execute()) {
                 header('Location: userlist.php?message=update_success');
                 exit();

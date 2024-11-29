@@ -77,7 +77,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                             </form>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive overflow-scroll" style="height: 63vh; min-width: 320px;">
+                            <div class="table-responsive-sm overflow-y-scroll" style="height: 63vh; min-width: 320px;">
                                 <?php if ($user_count > 0): ?>
                                     <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0" style="min-width: 50px;">
                                         <thead>
