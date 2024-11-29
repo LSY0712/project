@@ -26,7 +26,7 @@ $levels = [
 ];
 
 
-$sql = "SELECT * FROM users WHERE manager = 0";
+$sql = "SELECT * FROM users WHERE manager = 0 AND is_deleted = 0";
 $result = $conn->query($sql);
 $user_count = $result->num_rows;
 $users = $result->fetch_all(MYSQLI_ASSOC);
@@ -113,7 +113,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                                                 $stmt_result = $stmt->get_result();
                                                 $users = $stmt_result->fetch_all(MYSQLI_ASSOC);
                                             } else {
-                                                $sql = "SELECT * FROM users WHERE manager = 0";
+                                                $sql = "SELECT * FROM users WHERE manager = 0 AND is_deleted = 0";
                                                 $stmt_result = $conn->query($sql);
                                                 $users = $stmt_result->fetch_all(MYSQLI_ASSOC);
                                             }
