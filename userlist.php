@@ -26,7 +26,7 @@ $levels = [
 ];
 
 
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM users WHERE manager = 0";
 $result = $conn->query($sql);
 $user_count = $result->num_rows;
 $users = $result->fetch_all(MYSQLI_ASSOC);
@@ -113,7 +113,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                                                 $stmt_result = $stmt->get_result();
                                                 $users = $stmt_result->fetch_all(MYSQLI_ASSOC);
                                             } else {
-                                                $sql = "SELECT * FROM users";
+                                                $sql = "SELECT * FROM users WHERE manager = 0";
                                                 $stmt_result = $conn->query($sql);
                                                 $users = $stmt_result->fetch_all(MYSQLI_ASSOC);
                                             }
@@ -221,7 +221,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                                 <?php endif; ?>
                             </div>
 
-                            <div class="p-2 pt-3">共計 <?= $user_count ?> 位會員</div>
+                            <div class="p-2 pt-3">共計 <?= htmlspecialchars($user_count) ?> 位會員</div>
                         </div>
                     </div>
                     <!-- /.container-fluid -->
